@@ -4,7 +4,16 @@ const Player = ({name, symbol}) => {
     const [isEditing, setIsEditing] = useState(false)
 
     const handleEdit = () => {
-        setIsEditing(!isEditing)
+        /**
+         * toggle the value of current state is not recommended by react for updating the state based on previous state
+         * setIsEditing(!isEditing) // schedule the state update to true
+         * setIsEditing(!isEditing) // schedule the state update to true
+         *
+         * Instead of this, use the updater function to update the state based on previous state
+         * setIsEditing(prevState => !prevState) // schedule the state update to true
+         * setIsEditing(prevState => !prevState) // schedule the state update to false
+         */
+         setIsEditing(prevState => !prevState)
     }
 
     let playerName = <span className="player-name">{name}</span>

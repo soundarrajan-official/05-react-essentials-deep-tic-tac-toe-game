@@ -23,3 +23,81 @@ You should use the public/ folder for any images that should not be handled by t
 Good candidates are images used directly in the index.html file or favicons.
 
 On the other hand, images that are used inside of components should typically be stored in the src/ folder (e.g., in src/assets/).
+
+## Updating State Based on Previous State Correctly
+
+### Not Recommended
+
+```jsx
+import {useState} from "react";
+
+const Player = ({name, symbol}) => {
+    const [isEditing, setIsEditing] = useState(false)
+
+    const handleEdit = () => {
+        /**
+         * toggle the value of current state is not recommended by react for updating the state based on previous state
+         */
+        setIsEditing(!isEditing) // schedule the state update to true
+        setIsEditing(!isEditing) // schedule the state update to true
+    }
+
+    let playerName = <span className="player-name">{name}</span>
+
+    if (isEditing) {
+        playerName = <input type="text"/>
+    }
+
+    return (
+        <li>
+            <span className="player">
+                {playerName}
+                <span className="player-symbol">{symbol}</span>
+            </span>
+            <button onClick={handleEdit}>
+                {isEditing ? "Save" : "Edit"}
+            </button>
+        </li>
+    )
+}
+
+export default Player
+```
+
+### Recommended
+
+```jsx
+import {useState} from "react";
+
+const Player = ({name, symbol}) => {
+    const [isEditing, setIsEditing] = useState(false)
+
+    const handleEdit = () => {
+        /**
+         * updater function is recommended by react for updating the state based on previous state
+         */
+        setIsEditing(prevState => !prevState) // schedule the state update to true
+        setIsEditing(prevState => !prevState) // schedule the state update to false
+    }
+
+    let playerName = <span className="player-name">{name}</span>
+
+    if (isEditing) {
+        playerName = <input type="text"/>
+    }
+
+    return (
+        <li>
+            <span className="player">
+                {playerName}
+                <span className="player-symbol">{symbol}</span>
+            </span>
+            <button onClick={handleEdit}>
+                {isEditing ? "Save" : "Edit"}
+            </button>
+        </li>
+    )
+}
+
+export default Player
+```

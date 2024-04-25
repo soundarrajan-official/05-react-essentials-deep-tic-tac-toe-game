@@ -1,6 +1,7 @@
 import {useState} from "react";
 
-const Player = ({name, symbol}) => {
+const Player = ({intialName, symbol}) => {
+    const [playerName, setPlayerName] = useState(intialName)
     const [isEditing, setIsEditing] = useState(false)
 
     const handleEdit = () => {
@@ -13,19 +14,23 @@ const Player = ({name, symbol}) => {
          * setIsEditing(prevState => !prevState) // schedule the state update to true
          * setIsEditing(prevState => !prevState) // schedule the state update to false
          */
-         setIsEditing(prevState => !prevState)
+        setIsEditing(prevState => !prevState)
     }
 
-    let playerName = <span className="player-name">{name}</span>
+    const handleNameChange = (event) => {
+        setPlayerName(event.target.value)
+    }
+
+    let editablePlayerName = <span className="player-name">{playerName}</span>
 
     if (isEditing) {
-        playerName = <input type="text"/>
+        editablePlayerName = <input type="text" value={playerName} onChange={handleNameChange}/>
     }
 
     return (
         <li>
             <span className="player">
-                {playerName}
+                {editablePlayerName}
                 <span className="player-symbol">{symbol}</span>
             </span>
             <button onClick={handleEdit}>
